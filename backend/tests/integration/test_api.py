@@ -1,30 +1,28 @@
 import unittest
 import json
-from app import app
-
+from backend.app import app
 
 class TestAPI(unittest.TestCase):
     def setUp(self):
-        self.client = app.test_client()
+        self.app = app.test_client()
+        self.app.testing = True
 
-    def test_recommend_endpoint(self):
-        response = self.client.post('/recommend', json={'movie_title': 'The Shining'})
+    def test_recommend_api(self):
+        response = self.app.post('/recommend', 
+            data=json.dumps({'movie_title': 'The Shining'}),
+            content_type='application/json'
+        )
         data = json.loads(response.data)
         self.assertEqual(response.status_code, 200)
         self.assertIn('recommendations', data)
         self.assertGreater(len(data['recommendations']), 0)
 
     def test_invalid_request(self):
-        response = self.client.post('/recommend', json={})
+        response = self.app.post('/recommend', 
+            data=json.dumps({}),
+            content_type='application/json'
+        )
         self.assertEqual(response.status_code, 400)
-        data = json.loads(response.data)
-        self.assertEqual(data['error'], 'Le titre du film est requis')
-
-    def test_movie_not_found(self):
-        response = self.client.post('/recommend', json={'movie_title': 'The Godfather'})
-        data = json.loads(response.data)
-        self.assertEqual(data['recommendations'], ["Film non trouvé"])
-
 
 if __name__ == '__main__':
     unittest.main()

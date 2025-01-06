@@ -9,7 +9,7 @@ app = Flask(__name__)
 CORS(app)
 
 # Charger les données du CSV
-movies_df = pd.read_csv("data/movies_cleaned.csv")
+movies_df = pd.read_csv("movies_cleaned.csv")
 
 # Configuration MLflow pour DagsHub (identifiants fournis)
 mlflow.set_tracking_uri("https://foderac3:9d2d5d002b35632a47b9e353e2b33eb241370f9f@dagshub.com/foderac3/Projet_ML_prod.mlflow")
