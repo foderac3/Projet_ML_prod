@@ -36,7 +36,7 @@ def get_recommendations(movie_title, top_n=5):
         top_indices = [i[0] for i in sim_scores[1:top_n+1]]
         return movies_df['name'].iloc[top_indices].tolist()
     except IndexError:
-        return ["Film non trouvé"]
+        return ["Film non trouvé "]
 
 # Route API pour obtenir des recommandations
 @app.route('/recommend', methods=['POST'])
