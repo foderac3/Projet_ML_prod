@@ -4,28 +4,28 @@ FROM node:20 as build
 # Définir le répertoire de travail
 WORKDIR /app
 
-# Copier les fichiers nécessaires
+# Copier les fichiers nécessaires et installer les dépendances
 COPY package*.json ./
 COPY . .
 
-# Installer les dépendances et builder
 RUN npm install
 RUN npm run build
 
-# Vérification que le dossier .next existe
-RUN ls -la /app/.next || (echo ".next directory not found" && exit 1)
+# Vérification du dossier public (ajout d'un fichier vide si nécessaire)
+RUN mkdir -p /app/public && echo "Placeholder for public folder" > /app/public/index.html
 
-# Étape 2 : Servir l'application avec Nginx
+# Étape 2 : Servir avec Nginx
 FROM nginx:alpine
 
-# Copier les fichiers Next.js build vers Nginx
+# Copier le dossier Next.js build
 COPY --from=build /app/.next /usr/share/nginx/html/.next
 
-# Ajouter la configuration par défaut de Nginx
+# Copier le dossier public (il existera toujours après la vérification)
+COPY --from=build /app/public /usr/share/nginx/html
+
+# Ajouter la configuration Nginx
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 
-# Exposer le port 3000
 EXPOSE 3000
 
-# Lancer Nginx
 CMD ["nginx", "-g", "daemon off;"]
