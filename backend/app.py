@@ -19,7 +19,7 @@ run_id = "13e263c276fa4a94b18a1c072725be16"
 logged_model_uri = f"runs:/{run_id}/encoder_model"
 
 try:
-    print(f"Loading model from run: {run_id}")
+    print(f"Loading model  from run: {run_id}")
     column_transformer = mlflow.sklearn.load_model(logged_model_uri)
 except Exception as e:
     raise Exception(f"Erreur lors du chargement du modèle MLflow : {e}")

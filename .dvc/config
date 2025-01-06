@@ -1,0 +1,7 @@
+[core]
+    remote = origin
+['remote "origin"']
+    url = https://dagshub.com/foderac3/Projet_ML_prod.dvc
+    auth = basic
+    user = foderac3
+    password = 9d2d5d002b35632a47b9e353e2b33eb241370f9f

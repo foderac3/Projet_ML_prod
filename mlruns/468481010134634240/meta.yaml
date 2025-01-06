@@ -1,0 +1,6 @@
+artifact_location: mlflow-artifacts:/468481010134634240
+creation_time: 1736184551354
+experiment_id: '468481010134634240'
+last_update_time: 1736184551354
+lifecycle_stage: active
+name: Movie_Recommendation_Experiment
