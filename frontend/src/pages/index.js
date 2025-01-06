@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import styles from '../../styles/Home.module.css';
 
 const Home = () => {
     const [movieTitle, setMovieTitle] = useState('');
@@ -24,22 +25,27 @@ const Home = () => {
     };
 
     return (
-        <div>
-            <h1>Recommander un Film</h1>
+        <div className={styles.container}>
+            <h1 className={styles.title}>Recommander un Film</h1>
             <input
                 type="text"
+                className={styles.input}
                 value={movieTitle}
                 onChange={(e) => setMovieTitle(e.target.value)}
                 placeholder="Nom du film"
             />
-            <button onClick={handleRecommend}>Recommander</button>
+            <button onClick={handleRecommend} className={styles.button}>
+                Recommander
+            </button>
 
-            <h2>Résultats :</h2>
-            <ul>
-                {recommendations.map((rec, index) => (
-                    <li key={index}>{rec}</li>
-                ))}
-            </ul>
+            <div className={styles.result}>
+                <h2>Résultats :</h2>
+                <ul>
+                    {recommendations.map((rec, index) => (
+                        <li key={index} className={styles.listItem}>{rec}</li>
+                    ))}
+                </ul>
+            </div>
         </div>
     );
 };
