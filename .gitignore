@@ -1,0 +1,17 @@
+# Node.js
+node_modules/
+.next/
+
+# Python
+env/
+venv/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Données volumineuses
+*.npy
+*.pkl
+*.h5
+*.model
