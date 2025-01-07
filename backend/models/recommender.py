@@ -7,7 +7,7 @@ import joblib
 import mlflow
 import mlflow.sklearn
 
-# Configuration MLflow pour DagsHub
+# MLflow configuration for DagsHub
 DAGSHUB_USERNAME = "foderac3"
 DAGSHUB_TOKEN = "9d2d5d002b35632a47b9e353e2b33eb241370f9f"
 REPO_NAME = "Projet_ML_prod"
@@ -18,10 +18,9 @@ mlflow.set_experiment("Movie_Recommendation_Experiment")
 
 
 def train_model():
-    # Charger les données
     movies_df = pd.read_csv("data/movies_cleaned.csv")
 
-    # Encodage des colonnes 'genre' et 'director'
+    # Encoding of 'genre' and 'director' columns
     column_transformer = ColumnTransformer(
         transformers=[
             ('genre', OneHotEncoder(), ['genre']),
@@ -29,25 +28,25 @@ def train_model():
         ]
     )
 
-    # Entraînement du modèle et calcul de la matrice de similarité
+    # Model training and similarity matrix calculation
     with mlflow.start_run():
         print("Entraînement du modèle...")
         features_matrix = column_transformer.fit_transform(movies_df[['genre', 'director']])
         similarity_matrix = cosine_similarity(features_matrix)
 
-        # Log des paramètres et des métriques
+        # Parameter and metrics log
         mlflow.log_param("columns_encoded", ['genre', 'director'])
         mlflow.log_metric("matrix_shape", features_matrix.shape[0])
 
-        # Sauvegarde du modèle localement
+        # Saving the model locally
         joblib.dump(column_transformer, "model_encoder.pkl")
         np.save("similarity_matrix.npy", similarity_matrix)
 
-        # Log des artefacts dans DagsHub
+        # Log artifacts in DagsHub
         mlflow.log_artifact("model_encoder.pkl")
         mlflow.log_artifact("similarity_matrix.npy")
 
-        # Enregistrement du modèle dans MLflow
+        # Saving the model in MLflow
         mlflow.sklearn.log_model(column_transformer, "encoder_model")
 
         print("Modèle entraîné et sauvegardé sur DagsHub.")

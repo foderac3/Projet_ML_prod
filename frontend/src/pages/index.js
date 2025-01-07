@@ -8,7 +8,7 @@ const Home = () => {
 
     const handleRecommend = async () => {
         if (!movieTitle) {
-            alert("Veuillez entrer un titre de film : ");
+            alert("Please enter a movie title : ");
             return;
         }
 
@@ -19,8 +19,8 @@ const Home = () => {
 
             setRecommendations(response.data.recommendations);
         } catch (error) {
-            console.error("Erreur lors de la requête :", error);
-            alert("Impossible de récupérer les recommandations.");
+            console.error("Query error :", error);
+            alert("Unable to retrieve recommendations.");
         }
     };
 
@@ -32,7 +32,7 @@ const Home = () => {
                 className={styles.input}
                 value={movieTitle}
                 onChange={(e) => setMovieTitle(e.target.value)}
-                placeholder="Nom du film"
+                placeholder="Name of film"
             />
             <button onClick={handleRecommend} className={styles.button}>
                 Recommander

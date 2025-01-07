@@ -8,13 +8,12 @@ import mlflow.sklearn
 app = Flask(__name__)
 CORS(app)
 
-# Charger les données du CSV
 movies_df = pd.read_csv("movies_cleaned.csv")
 
-# Configuration MLflow pour DagsHub (identifiants fournis)
+# MLflow configuration for DagsHub
 mlflow.set_tracking_uri("https://foderac3:9d2d5d002b35632a47b9e353e2b33eb241370f9f@dagshub.com/foderac3/Projet_ML_prod.mlflow")
 
-# Utilisation du run ID connu pour charger le modèle
+# Use the known run ID to load the model
 run_id = "13e263c276fa4a94b18a1c072725be16"
 logged_model_uri = f"runs:/{run_id}/encoder_model"
 
@@ -22,12 +21,12 @@ try:
     print(f"Loading model  from run: {run_id}")
     column_transformer = mlflow.sklearn.load_model(logged_model_uri)
 except Exception as e:
-    raise Exception(f"Erreur lors du chargement du modèle MLflow : {e}")
+    raise Exception(f"Error loading MLflow model : {e}")
 
-# Charger la matrice de similarité
+# Load similarity matrix
 similarity_matrix = np.load("similarity_matrix.npy")
 
-# Fonction de recommandation basée sur la similarité cosinus
+# Recommendation function
 def get_recommendations(movie_title, top_n=5):
     try:
         idx = movies_df[movies_df['name'] == movie_title].index[0]
@@ -36,20 +35,20 @@ def get_recommendations(movie_title, top_n=5):
         top_indices = [i[0] for i in sim_scores[1:top_n+1]]
         return movies_df['name'].iloc[top_indices].tolist()
     except IndexError:
-        return ["Film non trouvé "]
+        return ["Film not found"]
 
-# Route API pour obtenir des recommandations
+# API route for recommendations
 @app.route('/recommend', methods=['POST'])
 def recommend():
     data = request.json
     movie_title = data.get('movie_title')
 
     if not movie_title:
-        return jsonify({'error': 'Le titre du film est requis'}), 400
+        return jsonify({'error': 'The film title is required'}), 400
 
     recommendations = get_recommendations(movie_title)
     return jsonify({'recommendations': recommendations})
 
-# Lancer l'application Flask
+# Launch the Flask application
 if __name__ == '__main__':
     app.run(port=5001)

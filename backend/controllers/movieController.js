@@ -2,7 +2,7 @@ const axios = require('axios');
 const path = require('path');
 const moviesDataPath = path.join(__dirname, '../data/movies_cleaned.csv');
 
-// Recommandations via l'API Flask
+// Recommendations via the Flask API
 exports.getRecommendations = async (req, res) => {
     const { movie_title } = req.body;
 
